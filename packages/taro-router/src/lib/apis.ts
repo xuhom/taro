@@ -15,7 +15,19 @@ const navigateTo = function (opts = {} as NavigateOpts) {
   const current = h.now()
   const currentUrl = current.url
   const url = resolvePathname(opts.url, currentUrl)
-  h.push({ url })
+  var idx = -1;
+  for (var i =0; i < h.locationStack.length; i++) {
+    if (h.locationStack[i].url === url) {
+      idx = i;
+      break
+    }
+  }
+  if (idx !== -1) {
+    navigateBack({delta: h.locationStack.length - idx - 1});
+  } else {
+    url = {url}
+    h.push(url);
+  }
   return Promise.resolve()
 }
 
